@@ -2044,9 +2044,11 @@ async def on_ready():
 
 
 async def main():
-    if TOKEN == "TOKEN":
-        raise RuntimeError("Replace TOKEN with your Discord bot token before starting.")
-    await bot.start(os.getenv("TOKEN"))
+    token = os.getenv("DISCORD_TOKEN")
+    if not token:
+        raise RuntimeError("Set the DISCORD_TOKEN environment variable in Railway.")
+
+    await bot.start(token)
 
 
 if __name__ == "__main__":
