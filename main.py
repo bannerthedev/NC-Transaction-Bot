@@ -9,16 +9,19 @@ import re
 from pathlib import Path
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+import os
+import dotenv
 
 import discord
 from discord import app_commands
 from discord.ext import commands
+from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO)
-log = logging.getLogger("cta_bot")
+log = logging.getLogger("NC_bot")
+load_dotenv()
 
 # ---------------- CONFIG ----------------
-TOKEN = "MTU1NjQzMzIxOTE5MTMxMjQ3NA.GO6Mb0.n7gH4eAlI6naqlSJlAxUzHVIcvlGgDOj5QCQfg"  # Replace with your bot token; use an environment variable in production.
 GUILD_ID = 1308168064918884473
 
 TRANSACTIONS_ID = 1556440700093079572
@@ -43,11 +46,14 @@ UNBORN_CAPTAIN_ROLE_ID = 1508548191753343177
 EVENT_PING_ROLE_ID = 1508548173864505404
 
 GUILD_OBJ = discord.Object(id=GUILD_ID)
+# --------------------- FILES --------------------
+data_dir = Path(os.getenv("data_file", "/data"))
+data_dir.mkdir(parents=True, exist_ok=True)
 
-TEAMS_FILE = Path("teams.json")
-PLAYER_HISTORY_FILE = Path("player_history.json")
-INVITES_FILE = Path("invites.json")
-ROSTER_LOCK_FILE = Path("roster_lock.json")
+TEAMS_FILE = data_dir / "teams.json"
+PLAYER_HISTORY_FILE = data_dir / "player_history.json"
+INVITES_FILE = data_dir / "invites.json"
+ROSTER_LOCK_FILE = data_dir / "roster_lock.json"
 
 
 # ---------------- HELPERS ----------------
@@ -2040,7 +2046,7 @@ async def on_ready():
 async def main():
     if TOKEN == "TOKEN":
         raise RuntimeError("Replace TOKEN with your Discord bot token before starting.")
-    await bot.start(TOKEN)
+    await bot.start(os.getenv("TOKEN"))
 
 
 if __name__ == "__main__":
